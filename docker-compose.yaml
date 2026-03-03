@@ -54,9 +54,16 @@ services:
       - zabbix-db
       - zabbix-server
 
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus:latest
+    restart: always
+    ports:
+      - 9090:9090
+
   grafana:
-    container_name: grafana
-    image: grafana/grafana:10.6.1
+    container_name: grafana-lab
+    image: grafana/grafana:latest
     restart: always
     ports:
       - 3000:3000
@@ -64,6 +71,7 @@ services:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
       - GF_USERS_ALLOW_SIGN_UP=false
-      - GF_INSTALL_PLUGINS=alexanderzobnin-zabbix-app
+      - GF_INSTALL_PLUGINS=alexanderzobnin-zabbix-app,grafana-prometheus-datasource
     depends_on:
       - zabbix-server
+      - prometheus
